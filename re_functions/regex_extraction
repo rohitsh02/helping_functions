@@ -20,3 +20,31 @@ def find_value(documents: List[str], pattern: str) -> str:
             return value_str
     # Return '0' if no match is found
     return '0'
+
+
+## This function helps to test re pattern over pdf directory
+def extract_value_re(pdf_directory, pattern):
+    """
+    Search for the value in all PDF files in a directory and print the file name along with the value.
+
+    :param pdf_directory: Directory where the PDF files are located.
+    :param pattern: pattern
+    """
+    pdf_files = [file for file in os.listdir(pdf_directory) if file.lower().endswith(".pdf")]
+
+    for pdf_file in pdf_files:
+        # Load the PDF
+        loader = PDFPlumberLoader(os.path.join(pdf_directory, pdf_file))
+        documents = loader.load()
+
+        for document in documents:
+            content = document.page_content
+            matches = re.search(pattern, content)
+
+            if matches:
+                # Print the file name and the value found
+                print(f"PDF File: {pdf_file}Value: {matches[0]}")
+                break
+        else:
+            # If no match found, print the file name and '0'
+            print(f"PDF File: {pdf_file}, Value: 0")

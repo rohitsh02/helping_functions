@@ -1,0 +1,22 @@
+# Imports
+import re
+from typing import List, Tuple, Dict, Union
+
+
+## This function extract values from the document(langchain loaders loaded)
+def find_value(documents: List[str], pattern: str) -> str:
+    """
+    Find a value in a PDF document based on the provided pattern.
+
+    :param documents: List of documents from which values are extracted.
+    :param pattern: Regular expression pattern to search for in the document content.
+    :return: Extracted value or '0' if no match is found.
+    """
+    for document in documents:
+        content = document.page_content.lower()
+        matches = re.findall(pattern, content)
+        if matches:
+            value_str = matches[0].replace(',', '')  # Remove commas for proper conversion
+            return value_str
+    # Return '0' if no match is found
+    return '0'
